@@ -1,0 +1,40 @@
+<!--pages/works/index.wxml-->
+<view class="container">
+  <view class="header">
+    <text class="title">我的作品</text>
+    <text class="subtitle">共{{works.length}}个作品</text>
+    <button class="merge-btn" size="mini" bindtap="mergeOrphansToMaster">合并散装子项</button>
+  </view>
+
+  <!-- 移除类型筛选，作品页只展示主作品 -->
+
+  <view class="works-list" wx:if="{{filteredWorks.length > 0}}">
+    <view 
+      class="work-item" 
+      wx:for="{{filteredWorks}}" 
+      wx:key="id"
+    >
+      <view class="work-content" bindtap="viewWork" data-id="{{item.id}}">
+        <view class="work-icon">
+          <text class="icon-text">{{item.type === 'character' ? '👤' : item.type === 'worldview' ? '🌍' : item.type === 'dialog' ? '💬' : '🎨'}}</text>
+        </view>
+        <view class="work-info">
+          <text class="work-title">{{item.title || '未命名作品'}}</text>
+          <text class="work-time">{{item.updateTime || item.createTime}}</text>
+          <text class="work-stats">角色{{item.stats.character}} · 世界观{{item.stats.worldview}} · 对话{{item.stats.dialog}} · 插画{{item.stats.image}} · 故事{{item.stats.story}}</text>
+        </view>
+      </view>
+      <view class="work-actions">
+        <view class="action-icon-wrapper" catchtap="deleteWork" data-id="{{item.id}}">
+          <text class="action-icon">🗑️</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty-state" wx:else>
+    <text class="empty-icon">📝</text>
+    <text class="empty-text">暂无作品</text>
+    <text class="empty-hint">去创作工作台开始创作吧</text>
+  </view>
+</view>

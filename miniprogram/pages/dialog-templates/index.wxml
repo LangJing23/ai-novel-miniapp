@@ -1,0 +1,68 @@
+<!--pages/dialog-templates/index.wxml-->
+<view class="container">
+  <view class="header">
+    <text class="title">对话片段库</text>
+    <text class="subtitle">保存常用对话片段，快速插入到故事中</text>
+  </view>
+
+  <!-- 分类切换 -->
+  <view class="category-bar">
+    <view 
+      class="category-item {{currentCategory === (item === '全部' ? 'all' : item) ? 'active' : ''}}"
+      wx:for="{{categories}}" 
+      wx:key="*this"
+      wx:for-item="item"
+      data-category="{{item}}"
+      bindtap="switchCategory"
+    >
+      <text>{{item}}</text>
+    </view>
+  </view>
+
+  <!-- 片段列表 -->
+  <view class="templates-list">
+    <view 
+      class="template-item" 
+      wx:for="{{filteredTemplates}}" 
+      wx:key="id"
+    >
+      <view class="template-header">
+        <text class="template-title">{{item.title || '未命名片段'}}</text>
+        <view class="template-meta">
+          <text class="template-category">{{item.category || '其他'}}</text>
+          <text class="template-time">{{item.createTime || ''}}</text>
+        </view>
+      </view>
+      
+      <view class="template-content">
+        <text class="template-text">{{item.content || ''}}</text>
+      </view>
+      
+      <view class="template-actions">
+        <button class="action-btn use-btn" size="mini" data-id="{{item.id}}" bindtap="useTemplate">
+          使用
+        </button>
+        <button class="action-btn insert-btn" size="mini" data-id="{{item.id}}" bindtap="insertToStory">
+          插入故事
+        </button>
+        <button class="action-btn edit-btn" size="mini" data-id="{{item.id}}" bindtap="editTemplate">
+          编辑
+        </button>
+        <button class="action-btn delete-btn" size="mini" data-id="{{item.id}}" bindtap="deleteTemplate">
+          删除
+        </button>
+      </view>
+    </view>
+    
+    <view wx:if="{{filteredTemplates.length === 0}}" class="empty">
+      <text>暂无对话片段</text>
+      <text class="empty-hint">在对话生成页面可以保存为片段</text>
+    </view>
+  </view>
+</view>
+
+
+
+
+
+

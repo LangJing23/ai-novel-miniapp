@@ -1,0 +1,59 @@
+<!--pages/me/index.wxml-->
+<view class="container">
+  <!-- 用户信息 -->
+  <view class="user-section">
+    <view class="user-info" wx:if="{{userInfo}}">
+      <image class="avatar" src="{{userInfo.avatarUrl || '/images/icons/avatar.png'}}" mode="aspectFill"></image>
+      <view class="user-details">
+        <text class="nickname">{{userInfo.nickName || '微信用户'}}</text>
+        <text class="user-id">ID: {{userInfo.openid || '未登录'}}</text>
+      </view>
+    </view>
+    <button class="login-btn" wx:else bindtap="login">微信一键登录</button>
+  </view>
+
+  <!-- 功能列表 -->
+  <view class="menu-section">
+    <view class="menu-item" bindtap="navigateToAPIConfig">
+      <text class="menu-icon">🔑</text>
+      <text class="menu-text">API配置</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="navigateToExport">
+      <text class="menu-icon">📤</text>
+      <text class="menu-text">导出数据</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="fixAllImages">
+      <text class="menu-icon">🔧</text>
+      <text class="menu-text">修复图片</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="navigateToHelp">
+      <text class="menu-icon">❓</text>
+      <text class="menu-text">帮助中心</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="navigateToAbout">
+      <text class="menu-icon">ℹ️</text>
+      <text class="menu-text">关于我们</text>
+      <text class="menu-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 统计信息 -->
+  <view class="stats-section">
+    <view class="stat-item">
+      <text class="stat-value">{{stats.characters}}</text>
+      <text class="stat-label">角色</text>
+    </view>
+    <view class="stat-item">
+      <text class="stat-value">{{stats.worldviews}}</text>
+      <text class="stat-label">世界观</text>
+    </view>
+    <view class="stat-item">
+      <text class="stat-value">{{stats.works}}</text>
+      <text class="stat-label">作品</text>
+    </view>
+  </view>
+</view>

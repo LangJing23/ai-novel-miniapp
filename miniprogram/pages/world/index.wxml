@@ -1,0 +1,191 @@
+<!--pages/world/index.wxml-->
+<view class="container">
+  <!-- 输入页面 -->
+  <view class="input-section" wx:if="{{!result}}">
+    <view class="page-header">
+      <text class="page-title">构建世界观</text>
+      <text class="page-subtitle">描述世界观类型和核心规则</text>
+    </view>
+
+    <view class="input-box">
+      <textarea 
+        class="input-textarea" 
+        placeholder="请描述世界观类型(如仙侠/赛博朋克)、核心规则(如不能使用武力/魔法需要消耗能量)&#10;&#10;示例：仙侠世界观，修仙体系，分为炼气、筑基、金丹等境界，灵气是核心资源"
+        value="{{inputText}}"
+        bindinput="onInputChange"
+        maxlength="500"
+        auto-height
+      ></textarea>
+      <text class="char-count">{{inputText.length}}/500</text>
+    </view>
+
+    <view class="example-section">
+      <text class="example-title">💡 输入示例</text>
+      <view class="example-item" bindtap="useExample">
+        <text class="example-text">仙侠世界观，修仙体系，分为炼气、筑基、金丹等境界，灵气是核心资源</text>
+      </view>
+      <view class="example-item" bindtap="useExample2">
+        <text class="example-text">赛博朋克未来世界，科技高度发达，AI与人类共存，存在虚拟现实技术</text>
+      </view>
+    </view>
+
+    <button 
+      class="generate-btn" 
+      bindtap="generateWorldview"
+      disabled="{{!hasInput || loading}}"
+    >
+      {{loading ? 'AI生成中...' : '生成世界观设定集'}}
+    </button>
+  </view>
+
+  <!-- 结果页面 -->
+  <view class="result-section" wx:if="{{result}}">
+    <view class="result-header">
+      <text class="result-title">世界观设定集</text>
+    </view>
+
+    <view class="worldview-card">
+      <!-- 时代背景 -->
+      <view class="card-section {{editMode ? 'editable' : ''}} {{editingField === 'era' ? 'editing' : ''}}">
+        <view class="section-header">
+          <text class="section-title">时代背景</text>
+          <text class="edit-icon" wx:if="{{editMode && editingField !== 'era'}}" bindtap="startEdit" data-field="era">✏️</text>
+        </view>
+        <view wx:if="{{editingField === 'era'}}" class="edit-container">
+          <textarea 
+            class="edit-textarea" 
+            placeholder="请输入时代背景"
+            value="{{editingText}}"
+            bindinput="updateFieldContent"
+            data-field="era"
+            hold-keyboard
+            maxlength="1000"
+          ></textarea>
+          <view class="edit-actions">
+            <text class="edit-btn cancel" bindtap="cancelEdit">取消</text>
+            <text class="edit-btn save" bindtap="confirmFieldEdit" data-field="era">保存</text>
+          </view>
+        </view>
+        <scroll-view wx:else class="section-content-wrapper" scroll-y="true">
+          <text class="section-content" selectable="true">{{result.era || ''}}</text>
+        </scroll-view>
+      </view>
+
+      <!-- 地理环境 -->
+      <view class="card-section {{editMode ? 'editable' : ''}} {{editingField === 'geography' ? 'editing' : ''}}">
+        <view class="section-header">
+          <text class="section-title">地理环境</text>
+          <text class="edit-icon" wx:if="{{editMode && editingField !== 'geography'}}" bindtap="startEdit" data-field="geography">✏️</text>
+        </view>
+        <view wx:if="{{editingField === 'geography'}}" class="edit-container">
+          <textarea 
+            class="edit-textarea" 
+            placeholder="请输入地理环境"
+            value="{{editingText}}"
+            bindinput="updateFieldContent"
+            data-field="geography"
+            hold-keyboard
+            maxlength="1000"
+          ></textarea>
+          <view class="edit-actions">
+            <text class="edit-btn cancel" bindtap="cancelEdit">取消</text>
+            <text class="edit-btn save" bindtap="confirmFieldEdit" data-field="geography">保存</text>
+          </view>
+        </view>
+        <scroll-view wx:else class="section-content-wrapper" scroll-y="true">
+          <text class="section-content" selectable="true">{{result.geography || ''}}</text>
+        </scroll-view>
+      </view>
+
+      <!-- 社会规则 -->
+      <view class="card-section {{editMode ? 'editable' : ''}} {{editingField === 'socialRules' ? 'editing' : ''}}">
+        <view class="section-header">
+          <text class="section-title">社会规则</text>
+          <text class="edit-icon" wx:if="{{editMode && editingField !== 'socialRules'}}" bindtap="startEdit" data-field="socialRules">✏️</text>
+        </view>
+        <view wx:if="{{editingField === 'socialRules'}}" class="edit-container">
+          <textarea 
+            class="edit-textarea" 
+            placeholder="请输入社会规则"
+            value="{{editingText}}"
+            bindinput="updateFieldContent"
+            data-field="socialRules"
+            hold-keyboard
+            maxlength="1000"
+          ></textarea>
+          <view class="edit-actions">
+            <text class="edit-btn cancel" bindtap="cancelEdit">取消</text>
+            <text class="edit-btn save" bindtap="confirmFieldEdit" data-field="socialRules">保存</text>
+          </view>
+        </view>
+        <scroll-view wx:else class="section-content-wrapper" scroll-y="true">
+          <text class="section-content" selectable="true">{{result.socialRules || ''}}</text>
+        </scroll-view>
+      </view>
+
+      <!-- 核心冲突 -->
+      <view class="card-section {{editMode ? 'editable' : ''}} {{editingField === 'conflicts' ? 'editing' : ''}}">
+        <view class="section-header">
+          <text class="section-title">核心冲突</text>
+          <text class="edit-icon" wx:if="{{editMode && editingField !== 'conflicts'}}" bindtap="startEdit" data-field="conflicts">✏️</text>
+        </view>
+        <view wx:if="{{editingField === 'conflicts'}}" class="edit-container">
+          <textarea 
+            class="edit-textarea" 
+            placeholder="请输入核心冲突"
+            value="{{editingText}}"
+            bindinput="updateFieldContent"
+            data-field="conflicts"
+            hold-keyboard
+            maxlength="1000"
+          ></textarea>
+          <view class="edit-actions">
+            <text class="edit-btn cancel" bindtap="cancelEdit">取消</text>
+            <text class="edit-btn save" bindtap="confirmFieldEdit" data-field="conflicts">保存</text>
+          </view>
+        </view>
+        <scroll-view wx:else class="section-content-wrapper" scroll-y="true">
+          <text class="section-content" selectable="true">{{result.conflicts || ''}}</text>
+        </scroll-view>
+      </view>
+
+      <!-- 科技/魔法水平 -->
+      <view class="card-section {{editMode ? 'editable' : ''}} {{editingField === 'techLevel' ? 'editing' : ''}}">
+        <view class="section-header">
+          <text class="section-title">科技/魔法水平</text>
+          <text class="edit-icon" wx:if="{{editMode && editingField !== 'techLevel'}}" bindtap="startEdit" data-field="techLevel">✏️</text>
+        </view>
+        <view wx:if="{{editingField === 'techLevel'}}" class="edit-container">
+          <textarea 
+            class="edit-textarea" 
+            placeholder="请输入科技/魔法水平"
+            value="{{editingText}}"
+            bindinput="updateFieldContent"
+            data-field="techLevel"
+            hold-keyboard
+            maxlength="1000"
+          ></textarea>
+          <view class="edit-actions">
+            <text class="edit-btn cancel" bindtap="cancelEdit">取消</text>
+            <text class="edit-btn save" bindtap="confirmFieldEdit" data-field="techLevel">保存</text>
+          </view>
+        </view>
+        <scroll-view wx:else class="section-content-wrapper" scroll-y="true">
+          <text class="section-content" selectable="true">{{result.techLevel || ''}}</text>
+        </scroll-view>
+      </view>
+    </view>
+
+    <view class="action-buttons">
+      <button class="action-btn secondary {{editMode ? 'active' : ''}}" bindtap="editResult">
+        {{editMode ? '完成编辑' : '编辑'}}
+      </button>
+      <button class="action-btn secondary" bindtap="regenerate" wx:if="{{!editMode}}">重新生成</button>
+      <button class="action-btn primary" bindtap="saveWorldview">保存世界观</button>
+      <button class="action-btn secondary" bindtap="linkToDialog" wx:if="{{!editMode}}">关联对话</button>
+      <button class="action-btn secondary" bindtap="linkToImage" wx:if="{{!editMode}}">关联插画</button>
+    </view>
+
+    <button class="back-btn" bindtap="backToInput">返回工作台</button>
+  </view>
+</view>

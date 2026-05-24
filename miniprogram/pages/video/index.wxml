@@ -1,0 +1,95 @@
+<!--pages/video/index.wxml-->
+<view class="container">
+  <view class="header">
+    <text class="title">视频创作</text>
+    <text class="subtitle">让故事动起来</text>
+  </view>
+
+  <!-- 作品信息 -->
+  <view class="section" wx:if="{{work}}">
+    <view class="section-header">
+      <text class="section-title">作品：{{work.title || '未命名作品'}}</text>
+      <button class="mini-btn" size="mini" bindtap="showWorkSelector">切换作品</button>
+    </view>
+  </view>
+
+  <!-- 故事选择 -->
+  <view class="section" wx:if="{{work && work.stories && work.stories.length > 0}}">
+    <view class="section-header">
+      <text class="section-title">选择故事</text>
+    </view>
+    <view class="story-list">
+      <view 
+        class="story-item {{story && story.id === item.id ? 'active' : ''}}"
+        wx:for="{{work.stories}}" 
+        wx:key="id"
+        bindtap="selectStory"
+        data-id="{{item.id}}"
+      >
+        <text class="story-title">{{item.title || '未命名故事'}}</text>
+        <text class="story-summary">{{item.summary || (item.content ? item.content.substring(0, 50) + '...' : '')}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 视频提示词 -->
+  <view class="section" wx:if="{{story}}">
+    <view class="section-header">
+      <text class="section-title">视频提示词</text>
+      <button class="mini-btn" size="mini" bindtap="generateVideoPrompt">重新生成</button>
+    </view>
+    <view class="prompt-box">
+      <text class="prompt-text">{{videoPrompt || '点击"重新生成"生成视频提示词'}}</text>
+    </view>
+  </view>
+
+  <!-- 生成视频按钮 -->
+  <view class="action-section">
+    <button 
+      class="generate-btn {{generating ? 'disabled' : ''}}"
+      bindtap="generateVideo"
+      disabled="{{generating || !videoPrompt}}"
+    >
+      {{generating ? '生成中...' : '生成视频'}}
+    </button>
+  </view>
+
+  <!-- 生成的视频列表 -->
+  <view class="section" wx:if="{{videoList.length > 0}}">
+    <view class="section-header">
+      <text class="section-title">已生成的视频</text>
+    </view>
+    <view class="video-list">
+      <view class="video-item" wx:for="{{videoList}}" wx:key="id">
+        <video 
+          class="video-player"
+          src="{{item.content}}"
+          controls
+          show-center-play-btn="{{true}}"
+          bindplay="onVideoPlay"
+          binderror="onVideoError"
+        ></video>
+        <view class="video-info">
+          <text class="video-title">{{item.title || '未命名视频'}}</text>
+          <text class="video-time">{{item.createTime}}</text>
+        </view>
+        <view class="video-actions">
+          <button class="video-delete-btn" size="mini" data-id="{{item.id}}" bindtap="deleteVideo">删除</button>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!work || !work.stories || work.stories.length === 0}}">
+    <text class="empty-icon">🎬</text>
+    <text class="empty-text">请先选择包含故事的作品</text>
+    <button class="empty-btn" bindtap="showWorkSelector">选择作品</button>
+  </view>
+</view>
+
+
+
+
+
+

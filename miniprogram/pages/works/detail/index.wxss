@@ -1,0 +1,341 @@
+/* pages/works/detail/index.wxss */
+.container {
+  min-height: 100vh;
+  background: #f5f5f5;
+  padding: 30rpx;
+}
+
+.header {
+  margin-bottom: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-main {
+  display: flex;
+  flex-direction: column;
+}
+
+.title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 12rpx;
+  cursor: pointer;
+}
+
+.title {
+  font-size: 44rpx;
+  font-weight: bold;
+  color: #333;
+  flex: 1;
+}
+
+.edit-icon {
+  font-size: 32rpx;
+  opacity: 0.6;
+  transition: opacity 0.3s;
+}
+
+.title-wrapper:active .edit-icon {
+  opacity: 1;
+}
+
+.subtitle {
+  display: block;
+  font-size: 26rpx;
+  color: #999;
+}
+
+.section {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 24rpx 24rpx 8rpx 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.05);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.mini-btn {
+  padding: 8rpx 16rpx;
+  font-size: 24rpx;
+  border: none;
+  background: #f0f0f0;
+  color: #666;
+  border-radius: 8rpx;
+}
+
+.row {
+  padding: 18rpx 12rpx;
+  border-radius: 12rpx;
+}
+
+.row:active {
+  background: #f7f7f7;
+}
+
+.row-title {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.row-with-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.row-main {
+  flex: 1;
+}
+
+.row-actions {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.row-action-btn {
+  padding: 4rpx 12rpx;
+  font-size: 22rpx;
+  background: #e8f4ff;
+  color: #1890ff;
+  border-radius: 999rpx;
+  border: none;
+}
+
+.row-delete-btn {
+  padding: 4rpx 12rpx;
+  font-size: 22rpx;
+  background: #ffecec;
+  color: #e55c5c;
+  border-radius: 999rpx;
+  border: none;
+}
+
+.empty {
+  display: block;
+  padding: 12rpx;
+  font-size: 26rpx;
+  color: #999;
+}
+
+/* 插画网格布局 */
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+  margin-top: 16rpx;
+}
+
+.image-card {
+  position: relative;
+  border-radius: 12rpx;
+  overflow: hidden;
+  background: #f5f5f5;
+  aspect-ratio: 1;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.1);
+}
+
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.image-thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #f0f0f0;
+}
+
+.image-error-placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5;
+  border-radius: 12rpx;
+}
+
+.error-text {
+  font-size: 24rpx;
+  color: #999;
+  margin-bottom: 8rpx;
+}
+
+.error-hint {
+  font-size: 20rpx;
+  color: #ccc;
+}
+
+.image-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+  padding: 20rpx 12rpx 12rpx;
+}
+
+.image-title {
+  color: #fff;
+  font-size: 24rpx;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.image-actions {
+  position: absolute;
+  top: 8rpx;
+  right: 8rpx;
+}
+
+.image-edit-btn {
+  background: rgba(255, 255, 255, 0.9);
+  color: #fa8c16;
+  border: none;
+  padding: 4rpx 12rpx;
+  font-size: 22rpx;
+  border-radius: 999rpx;
+  margin-right: 8rpx;
+}
+
+.image-delete-btn {
+  background: rgba(255, 255, 255, 0.9);
+  color: #e55c5c;
+  border: none;
+  padding: 4rpx 12rpx;
+  font-size: 22rpx;
+  border-radius: 999rpx;
+}
+
+/* 视频和插画的对称布局 */
+.video-image-layout {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 16rpx;
+}
+
+.left-section {
+  flex: 1;
+}
+
+.right-section {
+  flex: 1;
+}
+
+.section-subtitle {
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 12rpx;
+}
+
+.image-grid-compact {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12rpx;
+}
+
+.image-card-compact {
+  position: relative;
+  border-radius: 8rpx;
+  overflow: hidden;
+  background: #f5f5f5;
+  aspect-ratio: 1;
+}
+
+.image-thumbnail-compact {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-list-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.video-item-compact {
+  position: relative;
+  background: #f8f9fa;
+  border-radius: 12rpx;
+  overflow: hidden;
+}
+
+.video-player-compact {
+  width: 100%;
+  height: 300rpx;
+  background: #000;
+}
+
+.video-info-compact {
+  padding: 12rpx;
+}
+
+.video-title-compact {
+  font-size: 26rpx;
+  color: #333;
+  display: block;
+}
+
+.video-delete-btn-compact {
+  position: absolute;
+  top: 8rpx;
+  right: 8rpx;
+  background: rgba(255, 77, 79, 0.9);
+  color: #fff;
+  border: none;
+  padding: 4rpx 12rpx;
+  font-size: 22rpx;
+  border-radius: 999rpx;
+}
+
+.empty-video {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60rpx 20rpx;
+  background: #f5f5f5;
+  border-radius: 12rpx;
+  min-height: 200rpx;
+}
+
+.empty-text-compact {
+  font-size: 26rpx;
+  color: #999;
+  margin-bottom: 24rpx;
+}
+
+.create-video-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8rpx;
+  padding: 16rpx 32rpx;
+  font-size: 26rpx;
+}
+

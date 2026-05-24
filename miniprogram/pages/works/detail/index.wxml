@@ -1,0 +1,217 @@
+<!--pages/works/detail/index.wxml-->
+<view class="container">
+  <view class="header">
+    <view class="header-main">
+      <view class="title-wrapper" bindtap="editWorkTitle">
+        <text class="title">{{work.title || '未命名作品'}}</text>
+        <text class="edit-icon">✏️</text>
+      </view>
+      <text class="subtitle">{{work.updateTime || work.createTime}}</text>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">角色</text>
+      <button class="mini-btn" size="mini" bindtap="createCharacter">新建</button>
+    </view>
+    <view wx:if="{{work.characters && work.characters.length}}">
+      <view class="row row-with-action" wx:for="{{work.characters}}" wx:key="id">
+        <view class="row-main" bindtap="openCharacter" data-id="{{item.characterId || item.id}}">
+          <text class="row-title">{{(item.content && item.content.basicInfo && item.content.basicInfo.name) || item.title || '未命名角色'}}</text>
+        </view>
+        <button class="row-delete-btn" size="mini" data-id="{{item.id}}" data-type="character" bindtap="deleteChildWork">删除</button>
+      </view>
+    </view>
+    <text wx:else class="empty">暂无角色</text>
+  </view>
+
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">世界观</text>
+      <button class="mini-btn" size="mini" bindtap="createWorldview">新建</button>
+    </view>
+    <view wx:if="{{work.worldviews && work.worldviews.length}}">
+      <view class="row row-with-action" wx:for="{{work.worldviews}}" wx:key="id">
+        <view class="row-main" bindtap="openWorldview" data-id="{{item.worldviewId || item.id}}">
+          <text class="row-title">
+          <!-- 尽量与各页保持同一摘要策略：优先 era / originalInput / geography -->
+          <block wx:if="{{item.content && item.content.era && item.content.era.trim().length > 0}}">
+            {{item.content.era.length > 20 ? item.content.era.substring(0, 20) + '...' : item.content.era}}
+          </block>
+          <block wx:elif="{{item.content && item.content.originalInput && item.content.originalInput.trim().length > 0}}">
+            {{item.content.originalInput.length > 20 ? item.content.originalInput.substring(0, 20) + '...' : item.content.originalInput}}
+          </block>
+          <block wx:elif="{{item.content && item.content.geography && item.content.geography.trim().length > 0}}">
+            {{item.content.geography.length > 20 ? item.content.geography.substring(0, 20) + '...' : item.content.geography}}
+          </block>
+          <block wx:elif="{{item.title && item.title.trim().length > 0}}">
+            {{item.title}}
+          </block>
+          <block wx:else>
+            世界观设定
+          </block>
+          </text>
+        </view>
+        <button class="row-delete-btn" size="mini" data-id="{{item.id}}" data-type="worldview" bindtap="deleteChildWork">删除</button>
+      </view>
+    </view>
+    <text wx:else class="empty">暂无世界观</text>
+  </view>
+
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">对话</text>
+      <button class="mini-btn" size="mini" bindtap="createDialog">新建</button>
+    </view>
+    <view wx:if="{{work.dialogs && work.dialogs.length}}">
+      <view class="row row-with-action" wx:for="{{work.dialogs}}" wx:key="id">
+        <view class="row-main" bindtap="openDialog" data-id="{{item.id}}">
+          <text class="row-title">{{item.title || '对话'}}</text>
+        </view>
+        <button class="row-delete-btn" size="mini" data-id="{{item.id}}" data-type="dialog" bindtap="deleteChildWork">删除</button>
+      </view>
+    </view>
+    <text wx:else class="empty">暂无对话</text>
+  </view>
+
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">插画</text>
+      <button class="mini-btn" size="mini" bindtap="createImage">新建</button>
+    </view>
+    <view wx:if="{{work.images && work.images.length}}">
+      <!-- 改为网格布局，支持预览 -->
+      <view class="image-grid">
+        <view 
+          class="image-card" 
+          wx:for="{{work.images}}" 
+          wx:key="id"
+          bindtap="previewImage" 
+          data-id="{{item.id}}"
+          data-url="{{item.content}}"
+          data-index="{{index}}"
+        >
+          <view class="image-container">
+            <image 
+              class="image-thumbnail" 
+              src="{{item.content}}" 
+              mode="aspectFill"
+              lazy-load="{{true}}"
+              binderror="onImageError"
+              data-id="{{item.id}}"
+            ></image>
+            <view class="image-error-placeholder" wx:if="{{item._loadError}}">
+              <text class="error-text">图片加载失败</text>
+              <text class="error-hint">点击重新下载</text>
+            </view>
+          </view>
+          <view class="image-overlay">
+            <text class="image-title">{{item.description || item.title || '插画'}}</text>
+          </view>
+          <view class="image-actions">
+            <button 
+              class="image-edit-btn" 
+              size="mini" 
+              data-id="{{item.id}}" 
+              catchtap="editImageDescription"
+            >
+              编辑
+            </button>
+            <button 
+              class="image-delete-btn" 
+              size="mini" 
+              data-id="{{item.id}}" 
+              data-type="image" 
+              catchtap="deleteChildWork"
+            >
+              删除
+            </button>
+          </view>
+        </view>
+      </view>
+    </view>
+    <text wx:else class="empty">暂无插画</text>
+  </view>
+
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">故事</text>
+      <button class="mini-btn" size="mini" bindtap="createStory">新建</button>
+    </view>
+    <view wx:if="{{work.stories && work.stories.length}}">
+      <view class="row row-with-action" wx:for="{{work.stories}}" wx:key="id">
+        <view class="row-main" bindtap="openStory" data-id="{{item.id}}">
+          <text class="row-title">{{item.title || '未命名故事'}}</text>
+        </view>
+        <view class="row-actions">
+          <button class="row-action-btn" size="mini" data-id="{{item.id}}" bindtap="exportStory">导出</button>
+          <button class="row-delete-btn" size="mini" data-id="{{item.id}}" data-type="story" bindtap="deleteChildWork">删除</button>
+        </view>
+      </view>
+    </view>
+    <text wx:else class="empty">暂无故事</text>
+  </view>
+
+  <!-- 视频创作区域 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">视频</text>
+      <button class="mini-btn" size="mini" bindtap="createVideo">生成视频</button>
+    </view>
+    <view class="video-image-layout">
+      <!-- 左侧：插画展示（可选，如果要在同一section显示） -->
+      <view class="left-section" wx:if="{{work.images && work.images.length > 0}}">
+        <view class="section-subtitle">插画预览</view>
+        <view class="image-grid-compact">
+          <view 
+            class="image-card-compact" 
+            wx:for="{{work.images}}" 
+            wx:key="id"
+            wx:for-item="img"
+            bindtap="previewImage" 
+            data-id="{{img.id}}"
+            data-url="{{img.content}}"
+          >
+            <image 
+              class="image-thumbnail-compact" 
+              src="{{img.content}}" 
+              mode="aspectFill"
+            ></image>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 右侧：视频列表 -->
+      <view class="right-section">
+        <view class="video-list-compact" wx:if="{{work.videos && work.videos.length > 0}}">
+          <view class="video-item-compact" wx:for="{{work.videos}}" wx:key="id">
+            <video 
+              class="video-player-compact"
+              src="{{item.content}}"
+              controls
+              show-center-play-btn="{{true}}"
+            ></video>
+            <view class="video-info-compact">
+              <text class="video-title-compact">{{item.title || '未命名视频'}}</text>
+            </view>
+            <button 
+              class="video-delete-btn-compact" 
+              size="mini" 
+              data-id="{{item.id}}" 
+              data-type="video" 
+              catchtap="deleteChildWork"
+            >
+              删除
+            </button>
+          </view>
+        </view>
+        <view class="empty-video" wx:else>
+          <text class="empty-text-compact">暂无视频</text>
+          <button class="create-video-btn" bindtap="createVideo">生成视频</button>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+

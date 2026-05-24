@@ -1,0 +1,255 @@
+<!--pages/character/index.wxml-->
+<view class="container">
+  <!-- 输入页面 -->
+  <view class="input-section" wx:if="{{!result}}">
+    <view class="page-header">
+      <text class="page-title">创建角色</text>
+      <text class="page-subtitle">描述角色的身份、性格、外貌特征</text>
+    </view>
+
+    <view class="input-box">
+      <textarea 
+        class="input-textarea" 
+        placeholder="请描述角色的身份(如古风侠客/科幻机器人)、性格(如傲娇/沉稳)、外貌特征&#10;&#10;示例：古风侠客，男，28岁，沉稳寡言，擅长剑术，口头禅'无妨'"
+        value="{{inputText}}"
+        bindinput="onInputChange"
+        maxlength="500"
+        auto-height
+      ></textarea>
+      <text class="char-count">{{inputText.length}}/500</text>
+    </view>
+
+    <view class="example-section">
+      <text class="example-title">💡 输入示例</text>
+      <view class="example-item" bindtap="useExample">
+        <text class="example-text">古风侠客，男，28岁，沉稳寡言，擅长剑术，口头禅'无妨'</text>
+      </view>
+      <view class="example-item" bindtap="useExample2">
+        <text class="example-text">二次元少女，16岁，傲娇性格，粉色双马尾，魔法师身份</text>
+      </view>
+    </view>
+
+    <button 
+      class="generate-btn" 
+      bindtap="generateCharacter"
+      disabled="{{loading}}"
+    >
+      {{loading ? 'AI生成中...' : '生成人设卡'}}
+    </button>
+  </view>
+
+  <!-- 结果页面 -->
+  <view class="result-section" wx:if="{{result}}">
+    <view class="result-header">
+      <text class="result-title">人设卡</text>
+    </view>
+
+    <view class="character-card">
+      <!-- 基础信息 -->
+      <view class="card-section {{editMode ? 'editable' : ''}} {{editingField === 'basicInfo' ? 'editing' : ''}}">
+        <view class="section-header">
+          <text class="section-title">基础信息</text>
+          <text class="edit-icon" wx:if="{{editMode && editingField !== 'basicInfo'}}" bindtap="startEdit" data-field="basicInfo">✏️</text>
+        </view>
+        
+        <!-- 编辑模式 -->
+        <view wx:if="{{editingField === 'basicInfo'}}" class="edit-container">
+          <view class="edit-info-item">
+            <text class="edit-label">姓名：</text>
+            <input 
+              class="edit-input" 
+              placeholder="请输入姓名"
+              value="{{result.basicInfo && result.basicInfo.name || ''}}"
+              bindinput="updateBasicInfoField"
+              data-field="name"
+            />
+          </view>
+          <view class="edit-info-item">
+            <text class="edit-label">年龄：</text>
+            <input 
+              class="edit-input" 
+              placeholder="请输入年龄"
+              value="{{result.basicInfo && result.basicInfo.age || ''}}"
+              bindinput="updateBasicInfoField"
+              data-field="age"
+            />
+          </view>
+          <view class="edit-info-item">
+            <text class="edit-label">性别：</text>
+            <input 
+              class="edit-input" 
+              placeholder="请输入性别"
+              value="{{result.basicInfo && result.basicInfo.gender || ''}}"
+              bindinput="updateBasicInfoField"
+              data-field="gender"
+            />
+          </view>
+          <view class="edit-info-item">
+            <text class="edit-label">身份：</text>
+            <input 
+              class="edit-input" 
+              placeholder="请输入身份"
+              value="{{result.basicInfo && result.basicInfo.identity || ''}}"
+              bindinput="updateBasicInfoField"
+              data-field="identity"
+            />
+          </view>
+          <view class="edit-actions">
+            <text class="edit-btn cancel" bindtap="cancelEdit">取消</text>
+            <text class="edit-btn save" bindtap="confirmBasicInfoEdit">保存</text>
+          </view>
+        </view>
+        
+        <!-- 显示模式 -->
+        <view wx:else>
+          <view class="info-item">
+            <text class="info-label">姓名：</text>
+            <text class="info-value">{{result.basicInfo && result.basicInfo.name || '未命名'}}</text>
+          </view>
+          <view class="info-item">
+            <text class="info-label">年龄：</text>
+            <text class="info-value">{{result.basicInfo && result.basicInfo.age || '未知'}}</text>
+          </view>
+          <view class="info-item">
+            <text class="info-label">性别：</text>
+            <text class="info-value">{{result.basicInfo && result.basicInfo.gender || '未知'}}</text>
+          </view>
+          <view class="info-item">
+            <text class="info-label">身份：</text>
+            <text class="info-value">{{result.basicInfo && result.basicInfo.identity || '未知'}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 性格 -->
+      <view class="card-section {{editMode ? 'editable' : ''}} {{editingField === 'personality' ? 'editing' : ''}}">
+        <view class="section-header">
+          <text class="section-title">性格特点</text>
+          <text class="edit-icon" wx:if="{{editMode && editingField !== 'personality'}}" bindtap="startEdit" data-field="personality">✏️</text>
+        </view>
+        
+        <!-- 编辑模式 -->
+        <view wx:if="{{editingField === 'personality'}}" class="edit-container">
+          <textarea 
+            class="edit-textarea" 
+            placeholder="请输入性格特点"
+            value="{{editingText}}"
+            bindinput="updateFieldContent"
+            data-field="personality"
+            hold-keyboard
+            maxlength="1000"
+          ></textarea>
+          <view class="edit-actions">
+            <text class="edit-btn cancel" bindtap="cancelEdit">取消</text>
+            <text class="edit-btn save" bindtap="confirmFieldEdit" data-field="personality">保存</text>
+          </view>
+        </view>
+        
+        <!-- 显示模式 -->
+        <scroll-view wx:else class="section-content-wrapper" scroll-y="true">
+          <text class="section-content">{{result.personality || ''}}</text>
+        </scroll-view>
+      </view>
+
+      <!-- 行为逻辑 -->
+      <view class="card-section {{editMode ? 'editable' : ''}} {{editingField === 'behavior' ? 'editing' : ''}}">
+        <view class="section-header">
+          <text class="section-title">行为逻辑</text>
+          <text class="edit-icon" wx:if="{{editMode && editingField !== 'behavior'}}" bindtap="startEdit" data-field="behavior">✏️</text>
+        </view>
+        
+        <!-- 编辑模式 -->
+        <view wx:if="{{editingField === 'behavior'}}" class="edit-container">
+          <textarea 
+            class="edit-textarea" 
+            placeholder="请输入行为逻辑"
+            value="{{editingText}}"
+            bindinput="updateFieldContent"
+            data-field="behavior"
+            hold-keyboard
+            maxlength="1000"
+          ></textarea>
+          <view class="edit-actions">
+            <text class="edit-btn cancel" bindtap="cancelEdit">取消</text>
+            <text class="edit-btn save" bindtap="confirmFieldEdit" data-field="behavior">保存</text>
+          </view>
+        </view>
+        
+        <!-- 显示模式 -->
+        <scroll-view wx:else class="section-content-wrapper" scroll-y="true">
+          <text class="section-content">{{result.behavior || ''}}</text>
+        </scroll-view>
+      </view>
+
+      <!-- 口头禅 -->
+      <view class="card-section {{editMode ? 'editable' : ''}} {{editingField === 'catchphrases' ? 'editing' : ''}}" wx:if="{{result.catchphrases && result.catchphrases.length > 0 || editingField === 'catchphrases'}}">
+        <view class="section-header">
+          <text class="section-title">口头禅</text>
+          <text class="edit-icon" wx:if="{{editMode && editingField !== 'catchphrases'}}" bindtap="startEdit" data-field="catchphrases">✏️</text>
+        </view>
+        
+        <!-- 编辑模式 -->
+        <view wx:if="{{editingField === 'catchphrases'}}" class="edit-container">
+          <textarea 
+            class="edit-textarea" 
+            placeholder="请输入口头禅，多个用逗号或换行分隔"
+            value="{{editingText}}"
+            bindinput="updateFieldContent"
+            data-field="catchphrases"
+            hold-keyboard
+          ></textarea>
+          <view class="edit-actions">
+            <text class="edit-btn cancel" bindtap="cancelEdit">取消</text>
+            <text class="edit-btn save" bindtap="confirmFieldEdit" data-field="catchphrases">保存</text>
+          </view>
+        </view>
+        
+        <!-- 显示模式 -->
+        <view wx:else class="tags">
+          <text class="tag" wx:for="{{result.catchphrases}}" wx:key="index">{{item}}</text>
+        </view>
+      </view>
+
+      <!-- 禁忌 -->
+      <view class="card-section {{editMode ? 'editable' : ''}} {{editingField === 'taboos' ? 'editing' : ''}}" wx:if="{{result.taboos && result.taboos.length > 0 || editingField === 'taboos'}}">
+        <view class="section-header">
+          <text class="section-title">禁忌</text>
+          <text class="edit-icon" wx:if="{{editMode && editingField !== 'taboos'}}" bindtap="startEdit" data-field="taboos">✏️</text>
+        </view>
+        
+        <!-- 编辑模式 -->
+        <view wx:if="{{editingField === 'taboos'}}" class="edit-container">
+          <textarea 
+            class="edit-textarea" 
+            placeholder="请输入禁忌，多个用逗号或换行分隔"
+            value="{{editingText}}"
+            bindinput="updateFieldContent"
+            data-field="taboos"
+            hold-keyboard
+          ></textarea>
+          <view class="edit-actions">
+            <text class="edit-btn cancel" bindtap="cancelEdit">取消</text>
+            <text class="edit-btn save" bindtap="confirmFieldEdit" data-field="taboos">保存</text>
+          </view>
+        </view>
+        
+        <!-- 显示模式 -->
+        <view wx:else class="tags">
+          <text class="tag taboo" wx:for="{{result.taboos}}" wx:key="index">{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="action-buttons">
+      <button class="action-btn secondary {{editMode ? 'active' : ''}}" bindtap="editResult">
+        {{editMode ? '完成编辑' : '编辑'}}
+      </button>
+      <button class="action-btn secondary" bindtap="regenerate" wx:if="{{!editMode}}">重新生成</button>
+      <button class="action-btn primary" bindtap="saveCharacter">保存角色</button>
+      <button class="action-btn secondary" bindtap="linkToDialog" wx:if="{{!editMode}}">关联对话</button>
+      <button class="action-btn secondary" bindtap="exportImage" wx:if="{{!editMode}}">导出图片</button>
+    </view>
+
+    <button class="back-btn" bindtap="backToInput">返回工作台</button>
+  </view>
+</view>

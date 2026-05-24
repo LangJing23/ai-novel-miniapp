@@ -1,0 +1,50 @@
+<!--pages/api-config/index.wxml-->
+<view class="container">
+  <view class="header">
+    <text class="title">API配置</text>
+    <text class="subtitle">配置您的API密钥以使用AI功能</text>
+  </view>
+
+  <!-- 豆包API配置 -->
+  <view class="config-section">
+    <text class="section-title">豆包API配置</text>
+    <view class="input-group">
+      <text class="input-label">API Key</text>
+      <input 
+        class="input-field" 
+        type="text" 
+        placeholder="请输入豆包API Key"
+        value="{{doubaoApiKey}}"
+        bindinput="onDoubaoKeyChange"
+      />
+      <text class="input-hint">在 <text class="link" bindtap="openDoubaoLink">豆包开放平台</text> 申请API Key</text>
+    </view>
+  </view>
+
+  <!-- 插画API配置 -->
+  <view class="config-section">
+    <text class="section-title">插画生成API配置</text>
+    <view class="input-group">
+      <text class="input-label">API Key</text>
+      <input 
+        class="input-field" 
+        type="text" 
+        placeholder="请输入插画API Key"
+        value="{{imageApiKey}}"
+        bindinput="onImageKeyChange"
+      />
+      <text class="input-hint">支持文心一格、百度AI云等平台</text>
+    </view>
+  </view>
+
+  <button class="save-btn" bindtap="saveConfig">保存配置</button>
+
+  <view class="tips-section">
+    <text class="tips-title">💡 配置说明</text>
+    <text class="tips-text">• 豆包API用于文本生成（角色、世界观、对话）</text>
+    <text class="tips-text">• 插画API用于图片生成</text>
+    <text class="tips-text">• API Key将保存在本地，不会上传到服务器</text>
+    <text class="tips-text">• 如不配置，将使用默认API通道（可能有使用限制）</text>
+  </view>
+</view>
+

@@ -1,0 +1,213 @@
+<!--pages/story/index.wxml-->
+<view class="container">
+  <view class="page-header">
+    <text class="page-title">创作故事</text>
+    <text class="page-subtitle">生成完整短篇小说</text>
+  </view>
+
+  <!-- 选择角色和世界观 -->
+  <view class="select-section">
+    <text class="select-label">选择角色（可多选）</text>
+    <view class="selected-characters" wx:if="{{selectedCharacters.length > 0}}">
+      <view class="character-tag" wx:for="{{selectedCharacters}}" wx:key="id" wx:for-index="idx">
+        <text class="tag-name">
+          <block wx:if="{{item.basicInfo && item.basicInfo.name}}">
+            {{item.basicInfo.name}}
+          </block>
+          <block wx:elif="{{item.name}}">
+            {{item.name}}
+          </block>
+          <block wx:else>未命名角色</block>
+        </text>
+        <text class="tag-remove" data-index="{{idx}}" bindtap="removeCharacter">×</text>
+      </view>
+    </view>
+    <picker 
+      mode="selector" 
+      range="{{characterList}}" 
+      range-key="name"
+      value="{{selectedCharacterIndex}}"
+      bindchange="onCharacterChange"
+    >
+      <view class="picker-view">
+        <text class="picker-text">添加角色</text>
+        <text class="picker-arrow">›</text>
+      </view>
+    </picker>
+    <view class="link-btn-wrapper">
+      <button class="link-btn" bindtap="navigateToCharacter">创建新角色</button>
+    </view>
+  </view>
+
+  <view class="select-section">
+    <text class="select-label">选择世界观（可选）</text>
+    <picker 
+      mode="selector" 
+      range="{{worldviewList}}" 
+      range-key="title"
+      value="{{selectedWorldviewIndex}}"
+      bindchange="onWorldviewChange"
+    >
+      <view class="picker-view">
+        <text class="picker-text">
+          <block wx:if="{{selectedWorldview}}">
+            <block wx:if="{{selectedWorldview.era && selectedWorldview.era.trim().length > 0}}">
+              {{selectedWorldview.era.length > 15 ? selectedWorldview.era.substring(0, 15) + '...' : selectedWorldview.era}}
+            </block>
+            <block wx:elif="{{selectedWorldview.originalInput && selectedWorldview.originalInput.trim().length > 0}}">
+              {{selectedWorldview.originalInput.length > 15 ? selectedWorldview.originalInput.substring(0, 15) + '...' : selectedWorldview.originalInput}}
+            </block>
+            <block wx:elif="{{selectedWorldview.geography && selectedWorldview.geography.trim().length > 0}}">
+              {{selectedWorldview.geography.length > 15 ? selectedWorldview.geography.substring(0, 15) + '...' : selectedWorldview.geography}}
+            </block>
+            <block wx:else>已选择世界观</block>
+          </block>
+          <block wx:else>请选择世界观</block>
+        </text>
+        <text class="picker-arrow">›</text>
+      </view>
+    </picker>
+    <view class="link-btn-wrapper" wx:if="{{!selectedWorldview}}">
+      <button class="link-btn" bindtap="navigateToWorld">创建新世界观</button>
+    </view>
+  </view>
+
+  <!-- 故事标题 - 移到Tab切换之前，作为基础信息 -->
+  <view class="select-section">
+    <text class="select-label">故事标题（可选）</text>
+    <input 
+      class="title-input-inline" 
+      value="{{storyTitle}}"
+      bindinput="onTitleChange"
+      maxlength="50"
+    />
+  </view>
+
+  <!-- Tab切换 -->
+  <view class="tab-bar">
+    <view class="tab-item {{currentTab === 0 ? 'active' : ''}}" data-tab="0" bindtap="switchTab">
+      <text>大纲生成</text>
+    </view>
+    <view class="tab-item {{currentTab === 1 ? 'active' : ''}}" data-tab="1" bindtap="switchTab">
+      <text>正文生成</text>
+    </view>
+  </view>
+
+  <!-- Tab1: 大纲生成 -->
+  <view class="tab-content" wx:if="{{currentTab === 0}}">
+    <view class="input-box">
+      <textarea 
+        class="input-textarea" 
+        placeholder="请输入故事前提/一句话概括&#10;&#10;示例：墨无痕被误认为叛徒，必须在七日内洗清冤屈"
+        value="{{premiseText}}"
+        bindinput="onPremiseChange"
+        maxlength="500"
+        auto-height
+      ></textarea>
+      <text class="char-count">{{premiseText.length}}/500</text>
+    </view>
+
+    <view class="length-selector">
+      <text class="length-label">目标字数：</text>
+      <picker mode="selector" range="{{[2000, 4000, 6000, 8000]}}" value="{{[2000, 4000, 6000, 8000].indexOf(targetLength)}}" bindchange="onTargetLengthChange">
+        <view class="length-picker">
+          <text>{{targetLength}}字</text>
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+    </view>
+
+    <button 
+      class="generate-btn" 
+      bindtap="generateOutline"
+      disabled="{{outlineLoading || premiseText.length === 0}}"
+    >
+      {{outlineLoading ? 'AI生成中...' : '生成故事大纲'}}
+    </button>
+
+    <!-- 大纲列表 -->
+    <view class="outline-list" wx:if="{{outline.length > 0}}">
+      <text class="outline-title">故事大纲</text>
+      <view class="outline-item" wx:for="{{outline}}" wx:key="index" wx:for-index="idx">
+        <view class="outline-header">
+          <text class="outline-index">{{idx + 1}}</text>
+          <text class="outline-item-title">{{item.title || '节点' + (idx + 1)}}</text>
+          <text class="outline-edit" data-index="{{idx}}" bindtap="editOutlineItem">✏️</text>
+        </view>
+        <text class="outline-desc">{{item.description || ''}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Tab2: 正文生成 -->
+  <view class="tab-content" wx:if="{{currentTab === 1}}">
+    <!-- 大纲列表（用于选择生成段落） -->
+    <view class="outline-list" wx:if="{{outline.length > 0}}">
+      <text class="outline-title">选择大纲节点生成段落</text>
+      <view class="outline-item clickable" wx:for="{{outline}}" wx:key="index" wx:for-index="idx">
+        <view class="outline-header">
+          <text class="outline-index">{{idx + 1}}</text>
+          <text class="outline-item-title">{{item.title || '节点' + (idx + 1)}}</text>
+          <button 
+            class="outline-generate-btn" 
+            size="mini" 
+            data-index="{{idx}}" 
+            bindtap="generateSegmentFromOutline"
+            disabled="{{segmentLoading}}"
+          >
+            {{segmentLoading && selectedOutlineIndex === idx ? '生成中...' : '生成本段'}}
+          </button>
+        </view>
+        <text class="outline-desc">{{item.description || ''}}</text>
+      </view>
+    </view>
+
+    <!-- 正文编辑区 -->
+    <view class="content-box">
+      <view class="content-header">
+        <text class="content-title">故事正文</text>
+        <view class="content-actions">
+          <button class="action-btn-mini" size="mini" bindtap="continueStory" disabled="{{segmentLoading || currentContent.length === 0}}">
+            {{segmentLoading ? '续写中...' : '继续写 500字'}}
+          </button>
+          <button class="action-btn-mini" size="mini" bindtap="generateImageFromSegment" wx:if="{{currentContent.length > 0}}">
+            生成插画
+          </button>
+          <button class="action-btn-mini" size="mini" bindtap="batchGenerateImages" wx:if="{{currentContent.length > 500 && outline.length > 0}}">
+            批量生成插画
+          </button>
+          <button class="action-btn-mini" size="mini" bindtap="generateDialogFromSegment" wx:if="{{currentContent.length > 0}}">
+            生成对话
+          </button>
+          <button class="action-btn-mini" size="mini" bindtap="optimizeAllDialogs" wx:if="{{currentContent.length > 500 && selectedCharacters.length > 0}}">
+            优化所有对话
+          </button>
+          <button class="action-btn-mini" size="mini" bindtap="navigateToDialogTemplates">
+            对话片段库
+          </button>
+        </view>
+      </view>
+      <textarea 
+        class="content-textarea" 
+        placeholder="故事正文将在这里显示...&#10;&#10;点击上方的大纲节点可以生成对应段落，或使用继续写功能续写故事"
+        value="{{currentContent}}"
+        bindinput="onContentChange"
+        maxlength="50000"
+        auto-height
+      ></textarea>
+      <text class="char-count">{{currentContent.length}}字</text>
+    </view>
+    
+    <!-- 保存按钮 - 作为正文Tab的一部分 -->
+    <view class="save-action-box">
+      <button 
+        class="save-btn" 
+        bindtap="saveStory"
+        disabled="{{currentContent.length === 0 && outline.length === 0}}"
+      >
+        保存故事
+      </button>
+    </view>
+  </view>
+</view>
+

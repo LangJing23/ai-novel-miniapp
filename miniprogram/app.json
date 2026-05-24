@@ -1,16 +1,59 @@
 {
   "pages": [
-    "pages/index/index",
-    "pages/example/index"
+    "pages/create/index",
+    "pages/works/index",
+    "pages/works/detail/index",
+    "pages/templates/index",
+    "pages/me/index",
+    "pages/character/index",
+    "pages/world/index",
+    "pages/dialog/index",
+    "pages/image/index",
+    "pages/story/index",
+    "pages/export/index",
+    "pages/dialog-templates/index",
+    "pages/api-config/index",
+    "pages/video/index"
   ],
   "window": {
-    "backgroundColor": "#F6F6F6",
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#F6F6F6",
-    "navigationBarTitleText": "云开发 QuickStart",
-    "navigationBarTextStyle": "black"
+    "navigationBarTitleText": "文绪绘境录",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black",
+    "backgroundTextStyle": "light"
   },
-  "sitemapLocation": "sitemap.json",
+  "tabBar": {
+    "color": "#8a8a8a",
+    "selectedColor": "#f5576c",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      { 
+        "pagePath": "pages/create/index", 
+        "text": "创作",
+        "iconPath": "images/icons/home.png",
+        "selectedIconPath": "images/icons/home-active.png"
+      },
+      { 
+        "pagePath": "pages/works/index", 
+        "text": "我的作品",
+        "iconPath": "images/icons/goods.png",
+        "selectedIconPath": "images/icons/goods-active.png"
+      },
+      { 
+        "pagePath": "pages/templates/index", 
+        "text": "模板库",
+        "iconPath": "images/icons/examples.png",
+        "selectedIconPath": "images/icons/examples-active.png"
+      },
+      { 
+        "pagePath": "pages/me/index", 
+        "text": "我的",
+        "iconPath": "images/icons/usercenter.png",
+        "selectedIconPath": "images/icons/usercenter-active.png"
+      }
+    ]
+  },
   "style": "v2",
+  "sitemapLocation": "sitemap.json",
   "lazyCodeLoading": "requiredComponents"
 }

@@ -1,0 +1,274 @@
+/* pages/world/index.wxss */
+.container {
+  min-height: 100vh;
+  background: #f5f5f5;
+  padding: 30rpx;
+}
+
+.page-header {
+  margin-bottom: 40rpx;
+}
+
+.page-title {
+  display: block;
+  font-size: 44rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 12rpx;
+}
+
+.page-subtitle {
+  display: block;
+  font-size: 26rpx;
+  color: #999;
+}
+
+.input-box {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  position: relative;
+}
+
+.input-textarea {
+  width: 100%;
+  min-height: 300rpx;
+  font-size: 28rpx;
+  line-height: 1.8;
+  color: #333;
+  text-align: left;
+}
+
+.char-count {
+  position: absolute;
+  bottom: 10rpx;
+  right: 20rpx;
+  font-size: 24rpx;
+  color: #999;
+}
+
+.example-section {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+}
+
+.example-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.example-item {
+  background: #f8f9fa;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  margin-bottom: 16rpx;
+  border-left: 4rpx solid #f5576c;
+}
+
+.example-text {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.6;
+}
+
+.generate-btn {
+  width: 100%;
+  height: 88rpx;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: #fff;
+  border-radius: 20rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  border: none;
+  padding: 0;
+  margin: 0;
+  line-height: 88rpx;
+  text-align: center;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.generate-btn[disabled] {
+  opacity: 0.6;
+  background: linear-gradient(135deg, #d0d0d0 0%, #b0b0b0 100%);
+}
+
+.result-section {
+  padding-bottom: 40rpx;
+}
+
+.result-header {
+  margin-bottom: 30rpx;
+}
+
+.result-title {
+  font-size: 44rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.worldview-card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 40rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
+}
+
+.card-section {
+  margin-bottom: 40rpx;
+  padding-bottom: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.card-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.section-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20rpx;
+  padding-left: 20rpx;
+  border-left: 6rpx solid #f5576c;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+}
+
+.edit-icon {
+  font-size: 32rpx;
+  padding: 8rpx 16rpx;
+  opacity: 0.6;
+}
+
+.card-section.editable {
+  position: relative;
+}
+
+.card-section.editing {
+  background: #f8f9fa;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  margin: -20rpx;
+  margin-bottom: 20rpx;
+}
+
+.edit-container {
+  margin-top: 10rpx;
+}
+
+.edit-textarea {
+  width: 100%;
+  height: 300rpx; /* 固定高度，内容超出可滚动 */
+  padding: 20rpx;
+  background: #fff;
+  border: 2rpx solid #f5576c;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.6;
+  box-sizing: border-box;
+  text-align: left !important;
+  text-align-last: left;
+}
+
+.edit-textarea::placeholder {
+  text-align: left !important;
+}
+
+.edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16rpx;
+}
+
+.edit-btn {
+  padding: 12rpx 24rpx;
+  font-size: 26rpx;
+  border-radius: 8rpx;
+  margin-left: 16rpx;
+}
+
+.edit-btn.cancel {
+  color: #999;
+  background: #f5f5f5;
+}
+
+.edit-btn.save {
+  color: #fff;
+  background: #f5576c;
+}
+
+.action-btn.active {
+  background: #f5576c;
+  color: #fff;
+}
+.section-content-wrapper {
+  width: 100%;
+  height: 300rpx;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+.section-content {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.8;
+  word-wrap: break-word;
+  word-break: break-all;
+  white-space: normal;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.action-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+  margin-bottom: 30rpx;
+}
+
+.action-btn {
+  height: 72rpx;
+  border-radius: 16rpx;
+  font-size: 28rpx;
+  border: none;
+}
+
+.action-btn.primary {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: #fff;
+}
+
+.action-btn.secondary {
+  background: #f0f0f0;
+  color: #666;
+}
+
+.back-btn {
+  width: 100%;
+  height: 88rpx;
+  background: #fff;
+  color: #666;
+  border-radius: 20rpx;
+  font-size: 30rpx;
+  border: 1rpx solid #e0e0e0;
+}

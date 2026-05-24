@@ -1,0 +1,73 @@
+<!--
+此文件为开发者工具生成，生成时间: 2025/11/20下午7:21:22
+使用方法：
+在 D:\研究生工作\竞赛\全球校园人工智能算法竞赛\小说小程序\miniprogram\pages\create\index.wxml 引入模板
+
+```
+<import src="index.skeleton.wxml"/>
+<template is="skeleton" wx:if="{{loading}}" />
+```
+
+在 D:\研究生工作\竞赛\全球校园人工智能算法竞赛\小说小程序\miniprogram\pages\create\index.wxss 中引入样式
+```
+@import "./index.skeleton.wxss";
+```
+
+更多详细信息可以参考文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/skeleton.html
+-->
+<template name="skeleton">
+  <view class="sk-container">
+    <view class="container sk-image">
+      <view class="header">
+        <text class="title sk-transparent sk-text-14-2857-530 sk-text" style="background-position-x: 50%;">创作工作台</text>
+        <text class="subtitle sk-transparent sk-text-14-2857-829 sk-text" style="background-position-x: 50%;">开始你的创作之旅</text>
+      </view>
+      <view class="flow-section">
+        <view class="flow-header">
+          <text class="flow-title sk-transparent sk-text-14-2857-836 sk-text">📖 开始新故事</text>
+        </view>
+        <view class="flow-card sk-image">
+          <view class="flow-icon sk-transparent sk-text-14-2857-938 sk-text">✨</view>
+          <view class="flow-content">
+            <text class="flow-name sk-transparent sk-text-14-2857-353 sk-text">创建新作品</text>
+            <text class="flow-desc sk-transparent sk-text-18-7500-809 sk-text">新建一个作品，开始完整的创作流程</text>
+          </view>
+          <text class="flow-arrow sk-transparent sk-opacity">›</text>
+        </view>
+      </view>
+      <view class="flow-section">
+        <view class="flow-header">
+          <text class="flow-title sk-transparent sk-text-14-2857-980 sk-text">🛠️ 高级功能</text>
+        </view>
+        <view class="agent-grid">
+          <view class="agent-item">
+            <view class="agent-icon story-icon sk-transparent sk-image">📝</view>
+            <text class="agent-name sk-transparent sk-text-14-2857-685 sk-text" style="background-position-x: 50%;">故事创作</text>
+            <text class="agent-desc sk-transparent sk-text-14-2857-213 sk-text" style="background-position-x: 50%;">生成完整短篇小说</text>
+          </view>
+          <view class="agent-item">
+            <view class="agent-icon character-icon sk-transparent sk-image">👤</view>
+            <text class="agent-name sk-transparent sk-text-14-2857-845 sk-text" style="background-position-x: 50%;">人物角色定义</text>
+            <text class="agent-desc sk-transparent sk-text-14-2857-271 sk-text" style="background-position-x: 50%;">生成结构化人设卡</text>
+          </view>
+          <view class="agent-item">
+            <view class="agent-icon world-icon sk-transparent sk-image">🌍</view>
+            <text class="agent-name sk-transparent sk-text-14-2857-865 sk-text" style="background-position-x: 50%;">世界观构建</text>
+            <text class="agent-desc sk-transparent sk-text-14-2857-467 sk-text" style="background-position-x: 50%;">生成世界观设定集</text>
+          </view>
+          <view class="agent-item">
+            <view class="agent-icon dialog-icon sk-transparent sk-image">💬</view>
+            <text class="agent-name sk-transparent sk-text-14-2857-277 sk-text" style="background-position-x: 50%;">人物对话生成</text>
+            <text class="agent-desc sk-transparent sk-text-14-2857-928 sk-text" style="background-position-x: 50%;">生成符合人设的对话</text>
+          </view>
+          <view class="agent-item">
+            <view class="agent-icon image-icon sk-transparent sk-image">🎨</view>
+          </view>
+          <view class="agent-item">
+            <view class="agent-icon video-icon sk-transparent sk-image">🎬</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>

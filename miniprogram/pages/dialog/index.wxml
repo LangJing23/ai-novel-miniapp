@@ -1,0 +1,132 @@
+<!--pages/dialog/index.wxml-->
+<view class="container">
+  <!-- 输入页面 -->
+  <view class="input-section" wx:if="{{!result}}">
+    <view class="page-header">
+      <text class="page-title">{{mode === 'optimize' ? '优化对话' : '生成对话'}}</text>
+      <text class="page-subtitle">{{mode === 'optimize' ? '从故事文本中提取并优化对话' : '选择角色和世界观，输入对话场景'}}</text>
+    </view>
+
+    <!-- 选择角色 -->
+    <view class="select-section">
+      <text class="select-label">选择角色（可选）</text>
+      <picker 
+        mode="selector" 
+        range="{{characterList}}" 
+        range-key="name"
+        value="{{selectedCharacterIndex}}"
+        bindchange="onCharacterChange"
+      >
+        <view class="picker-view">
+          <text class="picker-text">{{selectedCharacter ? selectedCharacter.name : '请选择角色'}}</text>
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+      <view class="link-btn-wrapper" wx:if="{{!selectedCharacter}}">
+        <button class="link-btn" bindtap="navigateToCharacter">创建新角色</button>
+      </view>
+    </view>
+
+    <!-- 选择世界观 -->
+    <view class="select-section">
+      <text class="select-label">选择世界观（可选）</text>
+      <picker 
+        mode="selector" 
+        range="{{worldviewList}}" 
+        range-key="title"
+        value="{{selectedWorldviewIndex}}"
+        bindchange="onWorldviewChange"
+      >
+        <view class="picker-view">
+          <text class="picker-text">
+            <block wx:if="{{selectedWorldview}}">
+              <block wx:if="{{selectedWorldview.era && selectedWorldview.era.trim().length > 0}}">
+                {{selectedWorldview.era.length > 15 ? selectedWorldview.era.substring(0, 15) + '...' : selectedWorldview.era}}
+              </block>
+              <block wx:elif="{{selectedWorldview.originalInput && selectedWorldview.originalInput.trim().length > 0}}">
+                {{selectedWorldview.originalInput.length > 15 ? selectedWorldview.originalInput.substring(0, 15) + '...' : selectedWorldview.originalInput}}
+              </block>
+              <block wx:elif="{{selectedWorldview.geography && selectedWorldview.geography.trim().length > 0}}">
+                {{selectedWorldview.geography.length > 15 ? selectedWorldview.geography.substring(0, 15) + '...' : selectedWorldview.geography}}
+              </block>
+              <block wx:else>
+                {{selectedWorldview.title || '世界观设定'}}
+              </block>
+            </block>
+            <block wx:else>请选择世界观</block>
+          </text>
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+      <view class="link-btn-wrapper" wx:if="{{!selectedWorldview}}">
+        <button class="link-btn" bindtap="navigateToWorld">创建新世界观</button>
+      </view>
+    </view>
+
+    <!-- 输入场景（生成模式）或源文本（优化模式） -->
+    <view class="input-box" wx:if="{{mode === 'generate'}}">
+      <textarea 
+        class="input-textarea" 
+        placeholder="请输入对话场景描述&#10;&#10;示例：仙侠世界观中，傲娇师妹向师兄道歉"
+        value="{{sceneText}}"
+        bindinput="onSceneChange"
+        maxlength="300"
+        auto-height
+      ></textarea>
+      <text class="char-count">{{sceneText.length}}/300</text>
+    </view>
+    
+    <view class="input-box" wx:else>
+      <textarea 
+        class="input-textarea" 
+        placeholder="请粘贴包含对话的故事文本，系统将自动提取并优化对话"
+        value="{{sourceText}}"
+        bindinput="onSceneChange"
+        maxlength="2000"
+        auto-height
+      ></textarea>
+      <text class="char-count">{{sourceText.length}}/2000</text>
+    </view>
+
+    <view class="example-section">
+      <text class="example-title">💡 场景示例</text>
+      <view class="example-item" bindtap="useExample">
+        <text class="example-text">仙侠世界观中，傲娇师妹向师兄道歉</text>
+      </view>
+      <view class="example-item" bindtap="useExample2">
+        <text class="example-text">赛博朋克世界中，AI助手与人类进行日常对话</text>
+      </view>
+    </view>
+
+    <button 
+      class="generate-btn" 
+      bindtap="generateDialog"
+      disabled="{{loading}}"
+    >
+      {{loading ? 'AI处理中...' : (mode === 'optimize' ? '提取并优化对话' : '生成对话')}}
+    </button>
+  </view>
+
+  <!-- 结果页面 -->
+  <view class="result-section" wx:if="{{result}}">
+    <view class="result-header">
+      <text class="result-title">对话内容</text>
+    </view>
+
+    <view class="dialog-card">
+      <view class="dialog-content">
+        <text class="dialog-text">{{result}}</text>
+      </view>
+    </view>
+
+    <view class="action-buttons">
+      <button class="action-btn secondary" bindtap="editResult">编辑</button>
+      <button class="action-btn secondary" bindtap="regenerate">重新生成</button>
+      <button class="action-btn primary" bindtap="saveDialog">保存对话</button>
+      <button class="action-btn secondary" bindtap="saveAsTemplate">保存为片段</button>
+      <button class="action-btn secondary" bindtap="generateImageFromDialog">生成插画</button>
+    </view>
+
+    <button class="back-btn" bindtap="backToInput">返回工作台</button>
+  </view>
+</view>

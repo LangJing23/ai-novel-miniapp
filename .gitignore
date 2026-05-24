@@ -12,3 +12,16 @@ $RECYCLE.BIN/
 
 # Node.js
 node_modules/
+
+# Local environment / secrets
+.env
+.env.*
+!.env.example
+project.private.config.json
+*.local
+
+# Logs and caches
+*.log
+.cache/
+dist/
+temp/

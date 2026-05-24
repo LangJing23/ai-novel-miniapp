@@ -1,0 +1,86 @@
+<!--pages/templates/index.wxml-->
+<view class="container">
+  <view class="header">
+    <text class="title">创作灵感库</text>
+    <text class="subtitle">激发创作灵感，快速开始创作</text>
+  </view>
+
+  <!-- Tab切换 -->
+  <view class="tab-bar">
+    <view class="tab-item {{currentTab === 0 ? 'active' : ''}}" data-tab="0" bindtap="switchTab">
+      <text>故事前提</text>
+    </view>
+    <view class="tab-item {{currentTab === 1 ? 'active' : ''}}" data-tab="1" bindtap="switchTab">
+      <text>角色设定</text>
+    </view>
+    <view class="tab-item {{currentTab === 2 ? 'active' : ''}}" data-tab="2" bindtap="switchTab">
+      <text>世界观</text>
+    </view>
+  </view>
+
+  <!-- 故事前提灵感 -->
+  <view class="inspirations-list" wx:if="{{currentTab === 0}}">
+    <view 
+      class="inspiration-item" 
+      wx:for="{{inspirations.premises}}" 
+      wx:key="id"
+      bindtap="useInspiration"
+      data-category="premises"
+      data-id="{{item.id}}"
+    >
+      <view class="inspiration-header">
+        <text class="inspiration-title">{{item.title}}</text>
+        <text class="inspiration-difficulty">{{item.difficulty}}</text>
+      </view>
+      <text class="inspiration-content">{{item.content}}</text>
+      <view class="inspiration-tags">
+        <text class="tag" wx:for="{{item.tags}}" wx:key="*this" wx:for-item="tag">{{tag}}</text>
+      </view>
+      <text class="inspiration-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 角色设定灵感 -->
+  <view class="inspirations-list" wx:if="{{currentTab === 1}}">
+    <view 
+      class="inspiration-item" 
+      wx:for="{{inspirations.characters}}" 
+      wx:key="id"
+      bindtap="useInspiration"
+      data-category="characters"
+      data-id="{{item.id}}"
+    >
+      <view class="inspiration-header">
+        <text class="inspiration-title">{{item.title}}</text>
+        <text class="inspiration-difficulty">{{item.difficulty}}</text>
+      </view>
+      <text class="inspiration-content">{{item.content}}</text>
+      <view class="inspiration-tags">
+        <text class="tag" wx:for="{{item.tags}}" wx:key="*this" wx:for-item="tag">{{tag}}</text>
+      </view>
+      <text class="inspiration-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 世界观灵感 -->
+  <view class="inspirations-list" wx:if="{{currentTab === 2}}">
+    <view 
+      class="inspiration-item" 
+      wx:for="{{inspirations.worldviews}}" 
+      wx:key="id"
+      bindtap="useInspiration"
+      data-category="worldviews"
+      data-id="{{item.id}}"
+    >
+      <view class="inspiration-header">
+        <text class="inspiration-title">{{item.title}}</text>
+        <text class="inspiration-difficulty">{{item.difficulty}}</text>
+      </view>
+      <text class="inspiration-content">{{item.content}}</text>
+      <view class="inspiration-tags">
+        <text class="tag" wx:for="{{item.tags}}" wx:key="*this" wx:for-item="tag">{{tag}}</text>
+      </view>
+      <text class="inspiration-arrow">›</text>
+    </view>
+  </view>
+</view>

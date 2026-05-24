@@ -1,0 +1,119 @@
+<!--pages/image/index.wxml-->
+<view class="container">
+  <!-- 输入页面 -->
+  <view class="input-section" wx:if="{{!result}}">
+    <view class="page-header">
+      <text class="page-title">生成插画</text>
+      <text class="page-subtitle">可选择已创建的人设/世界观，或补充细节</text>
+    </view>
+
+    <!-- 导入角色 -->
+    <view class="import-section">
+      <text class="import-label">导入角色（可选）</text>
+      <picker 
+        mode="selector" 
+        range="{{characterList}}" 
+        range-key="name"
+        value="{{selectedCharacterIndex}}"
+        bindchange="onCharacterChange"
+      >
+        <view class="picker-view">
+          <text class="picker-text">{{selectedCharacter && selectedCharacter.basicInfo && selectedCharacter.basicInfo.name ? selectedCharacter.basicInfo.name : '请选择角色'}}</text>
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+      <view class="link-btn-wrapper" wx:if="{{!selectedCharacter}}">
+        <button class="link-btn" bindtap="navigateToCharacter">创建新角色</button>
+      </view>
+    </view>
+
+    <!-- 导入世界观 -->
+    <view class="import-section">
+      <text class="import-label">导入世界观（可选）</text>
+      <picker 
+        mode="selector" 
+        range="{{worldviewList}}" 
+        range-key="title"
+        value="{{selectedWorldviewIndex}}"
+        bindchange="onWorldviewChange"
+      >
+        <view class="picker-view">
+          <text class="picker-text">
+            <block wx:if="{{selectedWorldview}}">
+              <block wx:if="{{selectedWorldview.era && selectedWorldview.era.trim().length > 0}}">
+                {{selectedWorldview.era.length > 15 ? selectedWorldview.era.substring(0, 15) + '...' : selectedWorldview.era}}
+              </block>
+              <block wx:elif="{{selectedWorldview.originalInput && selectedWorldview.originalInput.trim().length > 0}}">
+                {{selectedWorldview.originalInput.length > 15 ? selectedWorldview.originalInput.substring(0, 15) + '...' : selectedWorldview.originalInput}}
+              </block>
+              <block wx:elif="{{selectedWorldview.geography && selectedWorldview.geography.trim().length > 0}}">
+                {{selectedWorldview.geography.length > 15 ? selectedWorldview.geography.substring(0, 15) + '...' : selectedWorldview.geography}}
+              </block>
+              <block wx:else>已选择世界观</block>
+            </block>
+            <block wx:else>请选择世界观</block>
+          </text>
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+      <view class="link-btn-wrapper" wx:if="{{!selectedWorldview}}">
+        <button class="link-btn" bindtap="navigateToWorld">创建新世界观</button>
+      </view>
+    </view>
+
+    <!-- 输入描述 -->
+    <view class="input-box">
+      <textarea 
+        class="input-textarea" 
+        placeholder="可选择已创建的人设/世界观，或补充细节&#10;&#10;示例：赛博朋克风格，银发女杀手，穿黑色机甲"
+        value="{{descriptionText}}"
+        bindinput="onDescriptionChange"
+        maxlength="300"
+        auto-height
+      ></textarea>
+      <text class="char-count">{{descriptionText.length}}/300</text>
+    </view>
+
+    <view class="example-section">
+      <text class="example-title">💡 描述示例</text>
+      <view class="example-item" bindtap="useExample">
+        <text class="example-text">赛博朋克风格，银发女杀手，穿黑色机甲</text>
+      </view>
+      <view class="example-item" bindtap="useExample2">
+        <text class="example-text">古风仙侠，白衣剑客，站在山巅，背景是云海</text>
+      </view>
+    </view>
+
+    <button 
+      class="generate-btn" 
+      bindtap="generateImage"
+      disabled="{{loading}}"
+    >
+      {{loading ? 'AI生成中...' : '生成插画'}}
+    </button>
+  </view>
+
+  <!-- 结果页面 -->
+  <view class="result-section" wx:if="{{result}}">
+    <view class="result-header">
+      <text class="result-title">生成的插画</text>
+    </view>
+
+    <view class="image-card">
+      <image 
+        class="generated-image" 
+        src="{{result}}" 
+        mode="aspectFit"
+        bindtap="previewImage"
+      ></image>
+    </view>
+
+    <view class="action-buttons">
+      <button class="action-btn secondary" bindtap="regenerate">重新生成</button>
+      <button class="action-btn primary" bindtap="saveImage">保存插画</button>
+      <button class="action-btn secondary" bindtap="downloadImage">保存到相册</button>
+    </view>
+
+    <button class="back-btn" bindtap="backToInput">返回工作台</button>
+  </view>
+</view>

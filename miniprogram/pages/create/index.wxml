@@ -1,0 +1,97 @@
+<!--pages/create/index.wxml-->
+<view class="container">
+  <view class="header">
+    <text class="title">创作工作台</text>
+    <text class="subtitle">开始你的创作之旅</text>
+  </view>
+
+  <!-- 流程A：从零开始新故事 -->
+  <view class="flow-section">
+    <view class="flow-header">
+      <text class="flow-title">📖 开始新故事</text>
+    </view>
+    <view class="flow-card" bindtap="createNewStory">
+      <view class="flow-icon">✨</view>
+      <view class="flow-content">
+        <text class="flow-name">创建新作品</text>
+        <text class="flow-desc">新建一个作品，开始完整的创作流程</text>
+      </view>
+      <text class="flow-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 流程B：继续创作 -->
+  <view class="flow-section" wx:if="{{recentWorks.length > 0}}">
+    <view class="flow-header">
+      <text class="flow-title">📚 继续创作</text>
+      <text class="flow-more" bindtap="navigateToWorks">查看全部 ›</text>
+    </view>
+    <view class="work-list">
+      <view class="work-item" wx:for="{{recentWorks}}" wx:key="id" bindtap="continueWork" data-id="{{item.id}}">
+        <view class="work-main">
+          <text class="work-title">{{item.title || '未命名作品'}}</text>
+          <text class="work-meta">{{item.updateTime || item.createTime}}</text>
+          <view class="work-stats">
+            <text class="stat-item">角色{{item.stats.character}}</text>
+            <text class="stat-item">世界观{{item.stats.worldview}}</text>
+            <text class="stat-item">对话{{item.stats.dialog}}</text>
+            <text class="stat-item">插画{{item.stats.image}}</text>
+            <text class="stat-item">故事{{item.stats.story}}</text>
+          </view>
+        </view>
+        <text class="work-arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 高级入口 -->
+  <view class="flow-section">
+    <view class="flow-header">
+      <text class="flow-title">🛠️ 高级功能</text>
+    </view>
+    <view class="agent-grid">
+      <view class="agent-item" bindtap="navigateToStory">
+        <view class="agent-icon story-icon">📝</view>
+        <text class="agent-name">故事创作</text>
+        <text class="agent-desc">生成完整短篇小说</text>
+      </view>
+
+      <view class="agent-item" bindtap="navigateToCharacter">
+        <view class="agent-icon character-icon">👤</view>
+        <text class="agent-name">人物角色定义</text>
+        <text class="agent-desc">生成结构化人设卡</text>
+      </view>
+
+      <view class="agent-item" bindtap="navigateToWorld">
+        <view class="agent-icon world-icon">🌍</view>
+        <text class="agent-name">世界观构建</text>
+        <text class="agent-desc">生成世界观设定集</text>
+      </view>
+
+      <view class="agent-item" bindtap="navigateToDialog">
+        <view class="agent-icon dialog-icon">💬</view>
+        <text class="agent-name">人物对话生成</text>
+        <text class="agent-desc">生成符合人设的对话</text>
+      </view>
+
+      <view class="agent-item" bindtap="navigateToImage">
+        <view class="agent-icon image-icon">🎨</view>
+        <text class="agent-name">插画生成</text>
+        <text class="agent-desc">生成角色立绘/场景图</text>
+      </view>
+
+      <view class="agent-item" bindtap="navigateToVideo">
+        <view class="agent-icon video-icon">🎬</view>
+        <text class="agent-name">视频创作</text>
+        <text class="agent-desc">将故事转化为视频</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="tips">
+    <text class="tips-title">💡 使用提示</text>
+    <text class="tips-text">• 推荐流程：创建作品 → 设定世界观/角色 → 生成故事 → 添加插画</text>
+    <text class="tips-text">• 所有内容会自动保存到对应作品下，方便统一管理</text>
+    <text class="tips-text">• 可以从故事段落直接生成对话和插画，让创作更连贯</text>
+  </view>
+</view>
